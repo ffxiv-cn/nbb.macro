@@ -11,7 +11,7 @@
     </div>
     <div class="footer">
       <p>
-        <span class="spanStyle1">使用须知：由于目前正则匹配不完善，带有 &#60;me&#62; 之类的宏无法正常转换</span>
+        <span class="spanStyle1">使用须知：由于目前正则匹配不完善，若是有转换错误，反馈时请务必提供原有宏</span>
       </p>
     </div>
     <div style="width:100%; text-align: left; padding: 10px;">
@@ -54,7 +54,7 @@ export default {
       craftaction: CraftAction,
       regUtf: /\s+[^\\s]+\s+/,
       regU: /\/(ac|action|aaction|gaction|generalaction)[\s]+((\w)|([^\\s]{2}))[\s]/,
-      regEn: /\/(ac|action|aaction|gaction|generalaction)[\s]+(([\w|[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]|[\u2605-\u2606]|[\u2190-\u2195]|\u203B]+)|"([^"]+)")?.*/,
+      regEn: /\/(ac|action|aaction|gaction|generalaction)[\s]+(([\w|[\u3000-\u303F]+|[\u3040-\u9FAF]+|[\uFF00-\uFFEF]+|[\u4E00-\u9FAF]+|[\u2605-\u2606]+|[\u2190-\u2195]+|[\u203B]+)|"([^"]+)")?.*/,
       langs: ['ja', 'en', 'chs'],
       solang: 'ja',
       showlang: 'ja',
@@ -75,14 +75,15 @@ export default {
       for (var i = 0; i < arr.length; i++) {
         let name = ''
         let txt = arr[i]
-        if (this.solang === 'en') {
-          name = this.regObjEn.exec(txt)
+        name = this.regObjEn.exec(txt)
+        /* if (this.solang === 'en') {
         } else {
           name = this.regObjUTF.exec(txt)
-        }
-        // console.log('doit.exec', txt, name)
+        } */
+        console.log('doit.exec', txt, name)
         if (name !== undefined && name !== null) {
-          let actName = this.solang === 'en' ? name[2] : name[0].trim()
+          // let actName = this.solang === 'en' ? name[2] : name[0].trim()
+          let actName = name[3]
           let act = this.findByName(actName)
           if (act === null) {
             out.ja.push('*匹配失敗*')
@@ -102,6 +103,9 @@ export default {
       this.$set(this.out, 'ja', out.ja.join('\n'))
       this.$set(this.out, 'en', out.en.join('\n'))
       this.$set(this.out, 'chs', out.chs.join('\n'))
+    },
+    tranNo () {
+
     },
     findByName (name) {
       let act = null
