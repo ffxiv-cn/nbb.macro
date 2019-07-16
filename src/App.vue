@@ -82,8 +82,8 @@ export default {
         } */
         console.log('doit.exec', txt, name)
         if (name !== undefined && name !== null) {
-          // let actName = this.solang === 'en' ? name[2] : name[0].trim()
-          let actName = name[3]
+          let actName = this.solang === 'en' || txt.indexOf('"') > 0 ? name[4] : name[3]
+          // let actName = name[3]
           let act = this.findByName(actName)
           if (act === null) {
             out.ja.push('*匹配失敗*')
@@ -91,7 +91,7 @@ export default {
             out.chs.push('*匹配失敗*')
           } else {
             out.ja.push(txt.replace(actName, act.ja))
-            out.en.push(txt.replace(actName, `"${act.en}"`))
+            out.en.push(txt.replace(actName, txt.indexOf('"') > 0 ? act.en : `"${act.en}"`))
             out.chs.push(txt.replace(actName, act.chs !== '' ? act.chs : actName))
           }
         } else {
